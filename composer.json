@@ -1,0 +1,20 @@
+{
+	"name"       :"anroots/minion-importer",
+	"type"       :"kohana-module",
+	"description":"CLI data import module for Kohana",
+	"keywords"   :["kohana", "cli", "import", "kohana module","dummy data","data migration"],
+	"homepage"   :"https://github.com/anroots/kohana-minion-importer",
+	"license"    :"MIT",
+	"authors"    :[
+		{
+			"name"    :"Ando Roots",
+			"email"   :"ando@sqroot.eu",
+			"homepage":"http://sqroot.eu",
+			"role"    :"Developer"
+		}
+	],
+	"require"    :{
+		"php"                :">=5.4.0",
+		"composer/installers":"*"
+	}
+}
