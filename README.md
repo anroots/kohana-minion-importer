@@ -2,6 +2,8 @@
 
 **Status: Working, but undocumented and needs generalizing. Use at own risk.**
 
+![Example terminal session](https://raw.github.com/anroots/kohana-minion-importer/master/Screenshot-1.png)
+
 Two main use cases:
 
 * Importing legacy data from external databases
@@ -27,7 +29,7 @@ git clone git://github.com/anroots/kohana-minion-importer.git modules/minion-imp
 ```javascript
 {
 	"require": {
-		"anroots/minion-importer":"2.*"
+		"anroots/minion-importer":"1.*"
 	}
 }
 ```
