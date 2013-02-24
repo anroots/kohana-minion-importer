@@ -85,7 +85,7 @@ abstract class Kohana_Minion_Import extends Model
 
 		if ($start_time === NULL)
 		{
-			$start_time = self::_get_start_time();
+			$start_time = self::get_start_time();
 		}
 
 		$prefix = get_class($this)."...\t\t";
@@ -94,7 +94,7 @@ abstract class Kohana_Minion_Import extends Model
 
 		if ($is_done)
 		{
-			$time = self::_get_execution_time($start_time);
+			$time = self::get_execution_time($start_time);
 			$start_time = NULL;
 			Minion_Import::write_replace($prefix.Minion_CLI::color(__('OK, {sec} sec', ['{sec}' => $time]), 'green'), TRUE);
 		} else
@@ -108,7 +108,7 @@ abstract class Kohana_Minion_Import extends Model
 	/**
 	 * @return int The time the import started
 	 */
-	protected static function _get_start_time()
+	public static function get_start_time()
 	{
 		$time = microtime();
 		$time = explode(' ', $time);
@@ -119,7 +119,7 @@ abstract class Kohana_Minion_Import extends Model
 	 * @param int $start_time
 	 * @return float Number of elapsed seconds since $start_time
 	 */
-	protected static function _get_execution_time($start_time)
+	public static function get_execution_time($start_time)
 	{
 		$time = microtime();
 		$time = explode(' ', $time);

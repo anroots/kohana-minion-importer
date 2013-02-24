@@ -26,6 +26,10 @@ mapping and filtering. [See example implementation for companies](https://github
  `models` arrays
 * Run `./minion import` from the CLI
 
+## Faker
+
+Use [fzaninotto/Faker](https://github.com/fzaninotto/Faker) to generate dummy sample/test data with minion-importer.
+
 ## Requires
 
 * Kohana Framework 3.3

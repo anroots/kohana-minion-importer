@@ -16,6 +16,11 @@ class Kohana_Task_Import extends Minion_Task
 		'no-truncate' => FALSE
 	];
 
+	protected $_summary = [
+		'model_rows'     => [],
+		'execution_time' => 0
+	];
+
 	/**
 	 * Truncate local database and import everything from the remote
 	 *
@@ -25,6 +30,8 @@ class Kohana_Task_Import extends Minion_Task
 	 */
 	protected function _execute(array $params)
 	{
+		$execution_start = Minion_Import::get_start_time();
+
 		if ($this->_options['quiet'])
 		{
 			Minion_Import::set_quiet(TRUE);
@@ -57,10 +64,14 @@ class Kohana_Task_Import extends Minion_Task
 				continue; // If we only want to import ONE model
 			}
 
-			$this->_import_model($model_name);
+			$imported_rows_count = $this->_import_model($model_name);
+			$this->_summary['model_rows'][$model_name] = $imported_rows_count;
 		}
 
-		Minion_Import::write(Minion_CLI::color("\nImport successfully completed.", 'green'));
+		$this->_summary['execution_time'] = Minion_Import::get_execution_time($execution_start);
+		$this->_print_summary();
+
+		Minion_Import::write(Minion_CLI::color('Import successfully completed.', 'green'));
 	}
 
 	/**
@@ -106,6 +117,32 @@ class Kohana_Task_Import extends Minion_Task
 			Minion_Import::write(Minion_CLI::color($e->getMessage(), 'red'));
 			return FALSE;
 		}
+	}
+
+	/**
+	 * @return Kohana_Task_Import
+	 */
+	private function _print_summary()
+	{
+		Minion_Import::write("\n=== Summary ===");
+		if (count($this->_summary['model_rows']))
+		{
+			foreach ($this->_summary['model_rows'] as $model_name => $imported_rows)
+			{
+				Minion_Import::write(
+					__(
+						'{model}: Inserted {cnt} rows.',
+						[
+							'{model}' => $model_name,
+							'{cnt}'   => $imported_rows
+						]
+					)
+				);
+			}
+		}
+		Minion_Import::write('');
+		Minion_Import::write(__('Execution time: {time} sec.', ['{time}' => $this->_summary['execution_time']]));
+		return $this;
 	}
 
 
