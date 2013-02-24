@@ -1,16 +1,26 @@
 <?php defined('SYSPATH') or die('No direct script access.');
+/**
+ * Base class for Minion_Import models
+ *
+ * @author Ando Roots <ando@sqroot.eu>
+ */
 abstract class Kohana_Minion_Import extends Model
 {
 
 	/**
-	 * Name of the Database profile to use as the import DB, remote database where data is fetched
+	 * @var int Number of rows to import
 	 */
-	const DB_PROFILE = 'import';
-
 	protected $_limit;
+
+	/**
+	 * @var bool TRUE to reduce CLI output
+	 */
 	public static $_quiet = FALSE;
 
-
+	/**
+	 * @param int $limit
+	 * @return Kohana_Minion_Import
+	 */
 	public function set_limit($limit)
 	{
 		$this->_limit = $limit;
@@ -18,16 +28,22 @@ abstract class Kohana_Minion_Import extends Model
 	}
 
 	/**
+	 * @param bool $quiet
+	 */
+	public static function set_quiet($quiet = TRUE)
+	{
+		self::$_quiet = $quiet;
+	}
+
+	/**
 	 * Truncates the local database of all data so that the import script can repopulate it.
 	 *
 	 * @static
-	 * @since 0.1
-	 * @param bool $specific_table
-	 * @return bool
+	 * @param bool|string $specific_table Only truncate the specified table. Defaults to all.
+	 * @return bool FALSE on failure
 	 */
 	public static final function truncate_local_database($specific_table = FALSE)
 	{
-
 		// The order of tables is important - FK exceptions
 		$tables = Kohana::$config->load('minion/import.truncate_order');
 
@@ -51,8 +67,10 @@ abstract class Kohana_Minion_Import extends Model
 	/**
 	 * Update current model's import progress.
 	 *
-	 * @param int $items_done
-	 * @param int $total_items
+	 * The progress is displayed on the CLI during import.
+	 *
+	 * @param int $items_done Number of items already imported
+	 * @param int $total_items Total number of items to import
 	 * @return \Minion_Import
 	 */
 	public function update_progress($items_done, $total_items)
@@ -74,19 +92,22 @@ abstract class Kohana_Minion_Import extends Model
 		$is_done = $items_done === $total_items - 1; // We start from 0
 		$separator = Text::alternate('/', '-', '\\', '|');
 
-		if (! $is_done)
-		{
-			Minion_Import::write_replace("{$prefix}{$items_done} {$separator} {$total_items}");
-		} else
+		if ($is_done)
 		{
 			$time = self::_get_execution_time($start_time);
 			$start_time = NULL;
 			Minion_Import::write_replace($prefix.Minion_CLI::color(__('OK, {sec} sec', ['{sec}' => $time]), 'green'), TRUE);
+		} else
+		{
+			Minion_Import::write_replace("{$prefix}{$items_done} {$separator} {$total_items}");
 		}
 
 		return $this;
 	}
 
+	/**
+	 * @return int The time the import started
+	 */
 	protected static function _get_start_time()
 	{
 		$time = microtime();
@@ -94,6 +115,10 @@ abstract class Kohana_Minion_Import extends Model
 		return $time[1] + $time[0];
 	}
 
+	/**
+	 * @param int $start_time
+	 * @return float Number of elapsed seconds since $start_time
+	 */
 	protected static function _get_execution_time($start_time)
 	{
 		$time = microtime();
@@ -104,15 +129,9 @@ abstract class Kohana_Minion_Import extends Model
 	}
 
 	/**
-	 * @param bool $quiet
-	 */
-	public static function set_quiet($quiet)
-	{
-		self::$_quiet = $quiet;
-	}
-
-	/**
-	 * @param string $text
+	 * Wrapper for text output. No output is given in quiet mode.
+	 *
+	 * @param string $text Text to write to the CLI
 	 */
 	public static function write($text = '')
 	{
@@ -124,6 +143,8 @@ abstract class Kohana_Minion_Import extends Model
 	}
 
 	/**
+	 * Wrapper for text output. No output is given in quiet mode.
+	 *
 	 * @param string $text
 	 * @param bool $end_line
 	 */

@@ -1,10 +1,11 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Interface for legacy system models.
- * Classes that implement this interface should be able to import some data from
- * the remote legacy system.
+ * Interface for import models.
  *
- * @since 0.2
+ * Classes that implement this interface should be able to import some data from
+ * the remote legacy system or a fake data generator.
+ *
+ * @author Ando Roots <ando@sqroot.eu>
  */
 interface Kohana_Minion_Import_Importable
 {
@@ -22,7 +23,7 @@ interface Kohana_Minion_Import_Importable
 	/**
 	 * Import a single row
 	 *
-	 * @param stdClass $row_data
+	 * @param stdClass $row_data Data that will be inserted into the local DB
 	 * @return Minion_Import_Importable
 	 */
 	public function migrate(stdClass $row_data);

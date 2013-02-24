@@ -35,7 +35,7 @@ class Kohana_Task_Database_Truncate extends Minion_Task
 			);
 			Minion_Import::write($e->getMessage());
 			Minion_Import::write(Minion_CLI::color('Import aborted.', 'red'));
-			throw new Import_Exception;
+			throw new Import_Exception($e->getMessage());
 		}
 	}
 }
