@@ -51,12 +51,17 @@ abstract class Kohana_Minion_Import extends Model
 		{
 			return FALSE;
 		}
+
+		Minion_Import::write_replace("Truncating...");
+
 		foreach ($tables as $table)
 		{
 			if ($specific_table && $specific_table != $table)
 			{
 				continue;
 			}
+
+			Minion_Import::write_replace('Truncating... '.Minion_CLI::color('`'.$table.'`', 'light_blue'));
 			DB::delete($table)
 				->execute();
 		}
@@ -88,7 +93,7 @@ abstract class Kohana_Minion_Import extends Model
 			$start_time = self::get_start_time();
 		}
 
-		$prefix = get_class($this)."...\t\t";
+		$prefix = get_class($this)."... ";
 		$is_done = $items_done === $total_items - 1; // We start from 0
 		$separator = Text::alternate('/', '-', '\\', '|');
 
