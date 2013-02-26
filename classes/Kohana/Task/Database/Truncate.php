@@ -19,18 +19,17 @@ class Kohana_Task_Database_Truncate extends Minion_Task
 	 */
 	protected function _execute(array $params)
 	{
-		Minion_Import::write_replace("Truncating the local database...");
 		try
 		{
 			Minion_Import::truncate_local_database($this->_options['table']);
 			Minion_Import::write_replace(
-				"Truncating the local database...\t\t".Minion_CLI::color('OK', 'green'),
+				"Truncating... ".Minion_CLI::color('OK', 'green'),
 				TRUE
 			);
 		} catch (Database_Exception $e)
 		{
 			Minion_Import::write_replace(
-				"Truncating the local database...\t\t".Minion_CLI::color('FAILED', 'red'),
+				"Truncating... ".Minion_CLI::color('FAILED', 'red'),
 				TRUE
 			);
 			Minion_Import::write($e->getMessage());

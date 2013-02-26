@@ -51,14 +51,20 @@ abstract class Kohana_Minion_Import extends Model
 		{
 			return FALSE;
 		}
+
+		Minion_Import::write_replace("Truncating...");
+
 		foreach ($tables as $table)
 		{
 			if ($specific_table && $specific_table != $table)
 			{
 				continue;
 			}
+
+			Minion_Import::write_replace('Truncating... '.Minion_CLI::color('`'.$table.'`', 'light_blue'));
 			DB::delete($table)
 				->execute();
+			sleep(1);
 		}
 
 		return TRUE;
