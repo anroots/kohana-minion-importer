@@ -37,7 +37,7 @@ class Kohana_Task_Import extends Minion_Task
 			Minion_Import::set_quiet(TRUE);
 		}
 
-		Minion_Import::write('Import started.');
+		Minion_Import::write("Import started.\n");
 
 		// Truncate local DB
 		if (! $this->_options['model'] && $this->_options['no-truncate'] === FALSE)
@@ -131,7 +131,7 @@ class Kohana_Task_Import extends Minion_Task
 			{
 				Minion_Import::write(
 					__(
-						'{model}: Inserted {cnt} rows.',
+						'{model}: {cnt} rows',
 						[
 							'{model}' => $model_name,
 							'{cnt}'   => $imported_rows
