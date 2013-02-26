@@ -64,7 +64,16 @@ class Kohana_Task_Import extends Minion_Task
 				continue; // If we only want to import ONE model
 			}
 
-			$imported_rows_count = $this->_import_model($model_name);
+			// Import the model
+			try
+			{
+				$imported_rows_count = $this->_import_model($model_name);
+			} catch (Import_Exception $e)
+			{
+				Minion_Import::write(Minion_CLI::color($e->getMessage(), 'red'));
+				exit(1);
+			}
+
 			$this->_summary['model_rows'][$model_name] = $imported_rows_count;
 		}
 
@@ -80,6 +89,7 @@ class Kohana_Task_Import extends Minion_Task
 	 * @param string $model_name File name in Minion_Import_ dir
 	 * @return int The number of imported rows
 	 * @throws Minion_Exception
+	 * @throws Import_Exception
 	 */
 	protected function _import_model($model_name)
 	{
@@ -93,8 +103,18 @@ class Kohana_Task_Import extends Minion_Task
 			], '500');
 		}
 
-		return $model->set_limit($this->_options['limit'])
-			->import();
+		try
+		{
+			$imported_rows_count = $model->set_limit($this->_options['limit'])
+				->import();
+		} catch (ORM_Validation_Exception $e)
+		{
+			throw new Import_Exception('Validation exception: '.print_r($e->errors(), TRUE));
+		} catch (Kohana_Exception $e)
+		{
+			throw new Import_Exception($e->getMessage());
+		}
+		return $imported_rows_count;
 	}
 
 	/**
@@ -122,7 +142,7 @@ class Kohana_Task_Import extends Minion_Task
 	/**
 	 * @return Kohana_Task_Import
 	 */
-	private function _print_summary()
+	protected function _print_summary()
 	{
 		Minion_Import::write("\n=== Summary ===");
 		if (count($this->_summary['model_rows']))
