@@ -6,7 +6,7 @@
  *
  * @author Ando Roots <ando@sqroot.eu>
  */
-class Kohana_Task_Import extends Minion_Task
+class Kohana_Task_Import extends Task_Abstract_Item_Processor
 {
 
 	protected $_options = [
