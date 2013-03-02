@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>PHP</ID>
+  <OriginalElement>\Task_Fake</OriginalElement>
+  <nodes>
+    <node x="-306.0" y="-54.0">\Kohana_Minion_Batch</node>
+    <node x="-277.0" y="1.0">\Minion_Batch</node>
+    <node x="-278.5" y="159.0">\Kohana_Task_Fake</node>
+    <node x="-253.5" y="218.0">\Task_Fake</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="\Minion_Batch" target="\Kohana_Minion_Batch">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="\Kohana_Task_Fake" target="\Minion_Batch">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="\Task_Fake" target="\Kohana_Task_Fake">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="78.0" y="131.0" />
+  <SelectedNodes />
+  <Categories />
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

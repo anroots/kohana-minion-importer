@@ -1,39 +1,17 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-/**
- * Base class for Minion_Import models
- *
- * @author Ando Roots <ando@sqroot.eu>
- */
-abstract class Kohana_Minion_Import extends Model
+class Kohana_Minion_Batch
 {
 
 	/**
-	 * @var int Number of rows to import
+	 * @param int $start_time
+	 * @return float Number of elapsed seconds since $start_time
 	 */
-	protected $_limit;
-
-	/**
-	 * @var bool TRUE to reduce CLI output
-	 */
-	public static $_quiet = FALSE;
-
-	/**
-	 * @param int $limit
-	 * @return Kohana_Minion_Import
-	 */
-	public function set_limit($limit)
+	public static function get_execution_time($start_time)
 	{
-		$this->_limit = $limit;
-		return $this;
+		return round((microtime(TRUE) - $start_time), 4);
 	}
 
-	/**
-	 * @param bool $quiet
-	 */
-	public static function set_quiet($quiet = TRUE)
-	{
-		self::$_quiet = $quiet;
-	}
+
 
 	/**
 	 * Truncates the local database of all data so that the import script can repopulate it.
@@ -110,55 +88,8 @@ abstract class Kohana_Minion_Import extends Model
 		return $this;
 	}
 
-	/**
-	 * @return int The time the import started
-	 */
-	public static function get_start_time()
-	{
-		$time = microtime();
-		$time = explode(' ', $time);
-		return $time[1] + $time[0];
-	}
 
-	/**
-	 * @param int $start_time
-	 * @return float Number of elapsed seconds since $start_time
-	 */
-	public static function get_execution_time($start_time)
-	{
-		$time = microtime();
-		$time = explode(' ', $time);
-		$time = $time[1] + $time[0];
-		$finish = $time;
-		return round(($finish - $start_time), 4);
-	}
 
-	/**
-	 * Wrapper for text output. No output is given in quiet mode.
-	 *
-	 * @param string $text Text to write to the CLI
-	 */
-	public static function write($text = '')
-	{
-		if (self::$_quiet)
-		{
-			return;
-		}
-		Minion_CLI::write($text);
-	}
 
-	/**
-	 * Wrapper for text output. No output is given in quiet mode.
-	 *
-	 * @param string $text
-	 * @param bool $end_line
-	 */
-	public static function write_replace($text = '', $end_line = FALSE)
-	{
-		if (self::$_quiet)
-		{
-			return;
-		}
-		Minion_CLI::write_replace($text, $end_line);
-	}
+
 }

@@ -13,12 +13,13 @@ return [
 	 */
 	'truncate_order' => [
 	],
-
 	/**
 	 * List of models to import from Minion_Import folder.
 	 * The order is significant. Consider foreign key dependencies.
 	 */
-	'models'         => [
+	'fake'           => [
+		'models' => [
 
+		]
 	]
 ];

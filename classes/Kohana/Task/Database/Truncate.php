@@ -5,7 +5,7 @@
  * @used-by Task_Import
  * @author Ando Roots <ando@sqroot.eu>
  */
-class Kohana_Task_Database_Truncate extends Minion_Task
+class Kohana_Task_Database_Truncate extends Minion_Task_Batch
 {
 
 	protected $_options = [
